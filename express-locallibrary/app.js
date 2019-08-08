@@ -15,9 +15,14 @@ app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Set up mongoose connection
+dbConnect();
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -39,3 +44,14 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
+
+function dbConnect () {
+  var mongoose = require('mongoose');
+  var mongoDB = 'mongodb+srv://admin:admin@cluster0-pmxkl.azure.mongodb.net/local_library?retryWrites=true&w=majority';
+  mongoose.connect(mongoDB, {
+    useNewUrlParser: true
+  })
+    .then(console.log('connected to db'));
+  var db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+}
