@@ -2,6 +2,7 @@ var Book = require('../models/book');
 var Author = require('../models/author');
 var Genre = require('../models/genre');
 var BookInstance = require('../models/bookinstance');
+var NotFoundErr = require('../errors/notFoundErr');
 
 var async = require('async');
 
@@ -69,9 +70,7 @@ exports.book_detail = function (req, res, next) {
       return next(err);
     }
     if (results.book == null) { // No results.
-      var notFoundErr = new Error('Book not found');
-      notFoundErr.status = 404;
-      return next(notFoundErr);
+      return next(new NotFoundErr('Book not found'));
     }
     // Successful, so render.
     res.render('book_detail', {

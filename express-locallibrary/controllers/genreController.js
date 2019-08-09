@@ -1,5 +1,6 @@
 var Genre = require('../models/genre');
 var Book = require('../models/book');
+var NotFoundErr = require('../errors/notFoundErr');
 var async = require('async');
 
 // Display list of all Genre.
@@ -40,9 +41,7 @@ exports.genre_detail = function (req, res, next) {
       return next(err);
     }
     if (results.genre == null) { // No results.
-      var notFoundErr = new Error('Genre not found');
-      notFoundErr.status = 404;
-      return next(notFoundErr);
+      return next(new NotFoundErr('Genre not found'));
     }
     // Successful, so render
     res.render('genre_detail', {
