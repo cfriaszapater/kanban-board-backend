@@ -2,7 +2,7 @@ var Book = require('../models/book');
 var Author = require('../models/author');
 var Genre = require('../models/genre');
 var BookInstance = require('../models/bookinstance');
-var NotFoundErr = require('../errors/notFoundErr');
+var NotFoundError = require('../errors/notFoundError');
 
 var async = require('async');
 
@@ -70,7 +70,7 @@ exports.book_detail = function (req, res, next) {
       return next(err);
     }
     if (results.book == null) { // No results.
-      return next(new NotFoundErr('Book not found'));
+      return next(new NotFoundError('Book not found'));
     }
     // Successful, so render.
     res.render('book_detail', {

@@ -3,7 +3,7 @@
 var Author = require('../models/author');
 var async = require('async');
 var Book = require('../models/book');
-var NotFoundErr = require('../errors/notFoundErr');
+var NotFoundError = require('../errors/notFoundError');
 
 // Display list of all Authors.
 exports.author_list = function (req, res, next) {
@@ -41,7 +41,7 @@ exports.author_detail = function (req, res, next) {
       return next(err);
     } // Error in API usage.
     if (results.author == null) { // No results.
-      return next(new NotFoundErr('Author not found'));
+      return next(new NotFoundError('Author not found'));
     }
     // Successful, so render.
     res.render('author_detail', {
