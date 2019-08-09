@@ -66,9 +66,9 @@ exports.genre_create_get = function (req, res, next) {
 exports.genre_create_post = [
 
   // Validate that the name field is not empty.
-  validator.body('name', 'Genre name required').isLength({
+  validator.body('name', 'Genre name required').trim().isLength({
     min: 1
-  }).trim(),
+  }),
 
   // Sanitize (escape) the name field.
   validator.sanitizeBody('name').escape(),
