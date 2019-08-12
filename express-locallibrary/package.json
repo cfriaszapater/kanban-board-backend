@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www",
+    "debug": "node --inspect-brk ./bin/www",
     "lint": "semistandard"
   },
   "dependencies": {
