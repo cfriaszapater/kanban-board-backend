@@ -67,8 +67,9 @@ exports.genre_create_post = [
 
   // Validate that the name field is not empty.
   validator.body('name', 'Genre name required').trim().isLength({
-    min: 1
-  }),
+    min: 3
+  }).withMessage('Minimum 3 characters required.')
+    .isAlphanumeric().withMessage('Only alphanumeric characters allowed.'),
 
   // Sanitize (escape) the name field.
   validator.sanitizeBody('name').escape(),
