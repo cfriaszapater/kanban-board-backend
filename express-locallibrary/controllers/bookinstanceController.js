@@ -6,10 +6,10 @@ var NotFoundError = require('../errors/notFoundError');
 const {
   body,
   validationResult
-} = require('express-validator/check');
+} = require('express-validator');
 const {
   sanitizeBody
-} = require('express-validator/filter');
+} = require('express-validator');
 
 // Display list of all BookInstances.
 exports.bookinstance_list = function (req, res, next) {

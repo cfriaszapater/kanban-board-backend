@@ -9,10 +9,10 @@ var async = require('async');
 const {
   body,
   validationResult
-} = require('express-validator/check');
+} = require('express-validator');
 const {
   sanitizeBody
-} = require('express-validator/filter');
+} = require('express-validator');
 
 exports.index = function (req, res) {
   async.parallel({
