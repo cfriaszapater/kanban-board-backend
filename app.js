@@ -10,12 +10,16 @@ var debug = require('debug')('express-locallibrary:app');
 var bunyan = require('bunyan');
 var log = bunyan.createLogger({ name: 'express-locallibrary' });
 var compression = require('compression');
+var helmet = require('helmet');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var catalogRouter = require('./routes/catalog');
 
 var app = express();
+
+// Add security by setting some standard headers
+app.use(helmet());
 
 // Compress all routes
 app.use(compression());
