@@ -4,16 +4,21 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var morgan = require('morgan');
+var mongoose = require('mongoose');
 var debug = require('debug')('express-locallibrary:app');
 var bunyan = require('bunyan');
 var log = bunyan.createLogger({ name: 'express-locallibrary' });
+var compression = require('compression');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var catalogRouter = require('./routes/catalog');
 
 var app = express();
+
+// Compress all routes
+app.use(compression());
 
 viewEngineSetup();
 dbConnectionSetup();
@@ -43,7 +48,7 @@ module.exports = app;
 function viewEngineSetup () {
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'pug');
-  app.use(logger('dev'));
+  app.use(morgan('dev'));
   app.use(express.json());
   app.use(express.urlencoded({
     extended: false
@@ -53,7 +58,6 @@ function viewEngineSetup () {
 }
 
 function dbConnectionSetup () {
-  var mongoose = require('mongoose');
   var mongoDB = 'mongodb+srv://admin:admin@cluster0-pmxkl.azure.mongodb.net/local_library?retryWrites=true&w=majority';
   mongoose.connect(mongoDB, {
     useNewUrlParser: true

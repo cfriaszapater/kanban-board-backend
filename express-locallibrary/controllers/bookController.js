@@ -13,8 +13,10 @@ const {
 const {
   sanitizeBody
 } = require('express-validator');
+var debug = require('debug')('express-locallibrary:controllers:bookController');
 
 exports.index = function (req, res) {
+  debug('Counting DB objects...');
   async.parallel({
     book_count: function (callback) {
       Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
@@ -34,6 +36,7 @@ exports.index = function (req, res) {
       Genre.countDocuments({}, callback);
     }
   }, function (err, results) {
+    debug('...finished counting DB objects');
     res.render('index', {
       title: 'Local Library Home',
       error: err,
