@@ -62,11 +62,15 @@ function viewEngineSetup () {
 }
 
 function dbConnectionSetup () {
-  var mongoDB = 'mongodb+srv://admin:admin@cluster0-pmxkl.azure.mongodb.net/local_library?retryWrites=true&w=majority';
-  mongoose.connect(mongoDB, {
+  mongoose.connect(dbUri(), {
     useNewUrlParser: true
   })
     .then(debug('connected to db'));
   var db = mongoose.connection;
   db.on('error', (err) => log.error('DB connection error: %s', err));
+}
+
+function dbUri () {
+  var devUri = 'mongodb+srv://admin:admin@cluster0-pmxkl.azure.mongodb.net/local_library?retryWrites=true&w=majority';
+  return process.env.MONGODB_URI || devUri;
 }
