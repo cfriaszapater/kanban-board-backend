@@ -7,7 +7,7 @@ Local library based on <https://developer.mozilla.org/en-US/docs/Learn/Server-si
 In dev (debug log and monitor file changes):
 
 ```sh
-DEBUG=express-locallibrary:* npm run devstart
+DEBUG=express-locallibrary:* npm run devstart | bunyan
 ```
 
 Standard:
