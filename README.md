@@ -34,3 +34,9 @@ View logs:
 ```sh
 heroku logs --tail
 ```
+
+Config:
+
+```sh
+heroku config
+```
