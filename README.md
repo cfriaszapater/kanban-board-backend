@@ -21,3 +21,16 @@ Standard:
 ```sh
 npm start
 ```
+
+## Deploy to production
+
+```sh
+git push heroku master
+heroku open
+```
+
+View logs:
+
+```sh
+heroku logs --tail
+```
