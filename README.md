@@ -1,3 +1,17 @@
-# javascript-playground
+# express-locallibrary
 
-Simple node applications in each subfolder, used to learn node and javascript.
+Local library based on <https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs>
+
+## Run
+
+In dev (debug log and monitor file changes):
+
+```sh
+DEBUG=express-locallibrary:* npm run devstart | bunyan
+```
+
+Standard:
+
+```sh
+npm start
+```
