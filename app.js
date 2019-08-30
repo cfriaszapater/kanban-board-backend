@@ -8,6 +8,7 @@ var compression = require("compression");
 var helmet = require("helmet");
 var indexRouter = require("./routes/index");
 var cardsRouter = require("./routes/cards");
+var columnsRouter = require("./routes/columns");
 
 var app = express();
 
@@ -23,6 +24,7 @@ dbConnectionSetup();
 
 app.use("/", indexRouter);
 app.use("/cards", cardsRouter);
+app.use("/columns", columnsRouter);
 
 module.exports = app;
 
