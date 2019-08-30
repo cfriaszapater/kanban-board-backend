@@ -18,7 +18,9 @@ exports.listCards = function(req, res, next) {
 exports.createCard = async function(req, res, next) {
   debug("create card", req.body);
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-    return next(new Error("body must not be empty"));
+    res.statusMessage = "body must not be empty";
+    res.status(400).end();
+    return next();
   }
 
   var card = new Card({
