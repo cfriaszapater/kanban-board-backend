@@ -1,5 +1,5 @@
 {
-  "name": "express-locallibrary",
+  "name": "kanban-board-backend",
   "version": "0.0.0",
   "engines": {
     "node": "12.7.0"

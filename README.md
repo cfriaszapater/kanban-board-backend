@@ -1,6 +1,6 @@
-# express-locallibrary
+# kanban-board-backend
 
-<https://en-express-locallibrary.herokuapp.com/catalog>
+<https://en-kanban-board-backend.herokuapp.com/catalog>
 
 Local library based on <https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs>
 
@@ -15,7 +15,7 @@ npm install
 In dev (debug log and monitor file changes):
 
 ```sh
-DEBUG=express-locallibrary:* npm run devstart | bunyan
+DEBUG=kanban-board-backend:* npm run devstart | bunyan
 ```
 
 Standard:
@@ -48,11 +48,11 @@ heroku config
 Eg for "0.2.0-heroku" tag:
 
 ```sh
-docker build -t koldraj/express-locallibrary:0.2.0-heroku .
+docker build -t koldraj/kanban-board-backend:0.2.0-heroku .
 ```
 
 ## Run with docker (for fun)
 
 ```sh
-docker run --name express-locallibrary -p 3000:3000 -d koldraj/express-locallibrary:0.2.0-heroku
+docker run --name kanban-board-backend -p 3000:3000 -d koldraj/kanban-board-backend:0.2.0-heroku
 ```

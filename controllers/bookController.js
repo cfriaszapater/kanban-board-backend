@@ -13,7 +13,7 @@ const {
 const {
   sanitizeBody
 } = require('express-validator');
-var debug = require('debug')('express-locallibrary:controllers:bookController');
+var debug = require('debug')('kanban-board-backend:controllers:bookController');
 
 exports.index = function (req, res) {
   debug('Counting DB objects...');

@@ -6,9 +6,9 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var morgan = require("morgan");
 var mongoose = require("mongoose");
-var debug = require("debug")("express-locallibrary:app");
+var debug = require("debug")("kanban-board-backend:app");
 var bunyan = require("bunyan");
-var log = bunyan.createLogger({ name: "express-locallibrary" });
+var log = bunyan.createLogger({ name: "kanban-board-backend" });
 var compression = require("compression");
 var helmet = require("helmet");
 
