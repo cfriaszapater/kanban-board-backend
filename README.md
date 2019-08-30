@@ -54,5 +54,5 @@ docker build -t koldraj/kanban-board-backend:0.2.0-heroku .
 ## Run with docker (for fun)
 
 ```sh
-docker run --name kanban-board-backend -p 3000:3000 -d koldraj/kanban-board-backend:0.2.0-heroku
+docker run --name kanban-board-backend -p 8080:8080 -d koldraj/kanban-board-backend:0.2.0-heroku
 ```

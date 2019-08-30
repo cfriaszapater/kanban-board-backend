@@ -54,17 +54,18 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.json(JSON.stringify(err));
 });
 
 module.exports = app;
 
 function dbConnectionSetup() {
+  debug("connecting to db...");
   mongoose
     .connect(dbUri(), {
       useNewUrlParser: true
     })
-    .then(debug("connected to db"));
+    .then(debug("...connected to db"));
   var db = mongoose.connection;
   db.on("error", err => log.error("DB connection error: %s", err));
 }
