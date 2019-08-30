@@ -1,8 +1,8 @@
 # kanban-board-backend
 
-<https://en-kanban-board-backend.herokuapp.com/catalog>
+<https://bs-kanban-board-backend.herokuapp.com>
 
-Local library based on <https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs>
+Kanban board backend REST API built with node + express.
 
 ## Build
 
