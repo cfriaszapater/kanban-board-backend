@@ -27,7 +27,7 @@ exports.createColumn = async function(req, res, next) {
   var column = new Column({
     id: req.body.id,
     title: req.body.title,
-    taskIds: req.body.taskIds
+    cardIds: req.body.cardIds
   });
 
   try {
@@ -72,7 +72,7 @@ exports.updateColumn = async function(req, res, next) {
     _id: req.params.columnId,
     id: req.body.id,
     title: req.body.title,
-    taskIds: req.body.taskIds
+    cardIds: req.body.cardIds
   });
 
   try {

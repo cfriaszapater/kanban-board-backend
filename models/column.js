@@ -11,7 +11,7 @@ var ColumnSchema = new Schema({
     type: String,
     required: false
   },
-  taskIds: [
+  cardIds: [
     {
       type: String,
       required: false
