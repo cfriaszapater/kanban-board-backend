@@ -1,24 +1,22 @@
 var express = require("express");
-// var path = require("path");
-// var cookieParser = require("cookie-parser");
 var morgan = require("morgan");
 var mongoose = require("mongoose");
 var debug = require("debug")("kanban-board-backend:app");
 var bunyan = require("bunyan");
 var log = bunyan.createLogger({ name: "kanban-board-backend" });
-// var compression = require("compression");
-// var helmet = require("helmet");
+var compression = require("compression");
+var helmet = require("helmet");
 
 var indexRouter = require("./routes/index");
 var cardsRouter = require("./routes/cards");
 
 var app = express();
 
-// // Add security by setting some standard headers
-// app.use(helmet());
+// Add security by setting some standard headers
+app.use(helmet());
 
-// // Compress all routes
-// app.use(compression());
+// Compress all routes
+app.use(compression());
 
 // Log HTTP requests in dev env
 app.use(morgan("dev"));
