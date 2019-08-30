@@ -75,6 +75,6 @@ function dbConnectionSetup() {
 
 function dbUri() {
   var devUri =
-    "mongodb+srv://admin:almendrusc0@cluster0-pmxkl.azure.mongodb.net/local_library?retryWrites=true&w=majority";
+    "mongodb+srv://admin:DZWkrlyCyhLimrez@cluster0-pmxkl.azure.mongodb.net/local_library?retryWrites=true&w=majority";
   return process.env.MONGODB_URI || devUri;
 }
