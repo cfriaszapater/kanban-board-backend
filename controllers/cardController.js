@@ -10,15 +10,7 @@ exports.cardsList = function(req, res, next) {
         return next(err);
       }
 
-      res.json([
-        {
-          id: 1,
-          content: "jarl"
-        },
-        {
-          id: 2,
-          content: "condemor"
-        }
-      ]);
+      debug(cards);
+      res.json(cards);
     });
 };
