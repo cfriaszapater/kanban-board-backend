@@ -2,8 +2,8 @@
 
 var createError = require("http-errors");
 var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
+// var path = require("path");
+// var cookieParser = require("cookie-parser");
 var morgan = require("morgan");
 var mongoose = require("mongoose");
 var debug = require("debug")("kanban-board-backend:app");
@@ -13,8 +13,7 @@ var compression = require("compression");
 var helmet = require("helmet");
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var catalogRouter = require("./routes/catalog");
+var cardsRouter = require("./routes/cards");
 
 var app = express();
 
@@ -24,12 +23,23 @@ app.use(helmet());
 // Compress all routes
 app.use(compression());
 
-viewEngineSetup();
+// Log HTTP requests in dev env
+app.use(morgan("dev"));
+
+// XXX decide if any of these are needed:
+// app.use(express.json());
+// app.use(
+//   express.urlencoded({
+//     extended: false
+//   })
+// );
+// app.use(cookieParser());
+// app.use(express.static(path.join(__dirname, "public")));
+
 dbConnectionSetup();
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/catalog", catalogRouter);
+app.use("/cards", cardsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -48,20 +58,6 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-
-function viewEngineSetup() {
-  app.set("views", path.join(__dirname, "views"));
-  app.set("view engine", "pug");
-  app.use(morgan("dev"));
-  app.use(express.json());
-  app.use(
-    express.urlencoded({
-      extended: false
-    })
-  );
-  app.use(cookieParser());
-  app.use(express.static(path.join(__dirname, "public")));
-}
 
 function dbConnectionSetup() {
   mongoose
