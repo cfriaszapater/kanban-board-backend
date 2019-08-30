@@ -27,6 +27,7 @@
     "pug": "^2.0.4"
   },
   "devDependencies": {
+    "eslint": "^6.2.2",
     "nodemon": "^1.19.1",
     "semistandard": "*"
   }
