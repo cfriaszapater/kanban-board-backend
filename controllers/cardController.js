@@ -15,15 +15,21 @@ exports.listCards = function(req, res, next) {
     });
 };
 
-exports.createCard = function(req, res, next) {
-  debug("create card ", req.body);
-  if (typeof req.body === "undefined") {
-    res.status(400).send("baad conteeent");
+exports.createCard = async function(req, res, next) {
+  debug("create card", req.body);
+  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
+    return next(new Error("body must not be empty"));
   }
+
   var card = new Card({
     id: req.body.id,
     content: req.body.content
   });
 
-  card.save().then(res.status(201).json(card));
+  try {
+    await card.save();
+    res.status(201).json(card);
+  } catch (err) {
+    next(err);
+  }
 };
