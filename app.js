@@ -4,6 +4,7 @@ var mongoose = require("mongoose");
 var debug = require("debug")("kanban-board-backend:app");
 var bunyan = require("bunyan");
 var log = bunyan.createLogger({ name: "kanban-board-backend" });
+var cors = require("cors");
 var compression = require("compression");
 var helmet = require("helmet");
 var indexRouter = require("./routes/index");
@@ -21,6 +22,8 @@ app.use(morgan("dev"));
 // Parse incoming requests with JSON payload in body
 app.use(express.json());
 dbConnectionSetup();
+// Enable calls from same host (eg: frontend running also in localhost)
+app.use(cors());
 
 app.use("/", indexRouter);
 app.use("/cards", cardsRouter);
