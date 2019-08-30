@@ -6,7 +6,6 @@ var bunyan = require("bunyan");
 var log = bunyan.createLogger({ name: "kanban-board-backend" });
 var compression = require("compression");
 var helmet = require("helmet");
-
 var indexRouter = require("./routes/index");
 var cardsRouter = require("./routes/cards");
 
@@ -14,10 +13,8 @@ var app = express();
 
 // Add security by setting some standard headers
 app.use(helmet());
-
 // Compress all routes
 app.use(compression());
-
 // Log HTTP requests in dev env
 app.use(morgan("dev"));
 // Parse incoming requests with JSON payload in body
