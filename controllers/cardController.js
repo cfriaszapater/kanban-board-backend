@@ -35,6 +35,17 @@ exports.createCard = async function(req, res, next) {
   }
 };
 
+exports.getCard = async function(req, res, next) {
+  debug("get card", req.params.cardId);
+
+  try {
+    let card = await Card.findById(req.params.cardId);
+    res.status(200).json(card);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 exports.updateCard = async function(req, res, next) {
   debug("update card", req.params.cardId, req.body);
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
