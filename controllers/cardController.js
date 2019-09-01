@@ -1,22 +1,23 @@
-const { createCard } = require("../domain/card");
-
-var Card = require("../db/card");
+const {
+  createCard,
+  listCardsSortByIdAscending,
+  getCardById,
+  updateCard,
+  deleteCard
+} = require("../domain/card");
 var debug = require("debug")("kanban-board-backend:controllers:cardController");
 
-exports.listCards = async function(req, res, next) {
+exports.list = async function(req, res, next) {
   debug("list cards");
   try {
-    let cards = await Card.find()
-      .sort([["id", "ascending"]])
-      .exec();
-    debug(cards);
+    let cards = await listCardsSortByIdAscending();
     res.json(cards);
   } catch (err) {
     return next(err);
   }
 };
 
-exports.postCard = async function(req, res, next) {
+exports.post = async function(req, res, next) {
   debug("create card", req.body);
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
     res.statusMessage = "body must not be empty";
@@ -26,25 +27,24 @@ exports.postCard = async function(req, res, next) {
 
   try {
     var card = await createCard(req.body.id, req.body.content);
-
     res.status(201).json(card);
   } catch (err) {
     next(err);
   }
 };
 
-exports.getCard = async function(req, res, next) {
+exports.get = async function(req, res, next) {
   debug("get card", req.params.cardId);
 
   try {
-    let card = await Card.findById(req.params.cardId);
+    let card = await getCardById(req);
     res.status(200).json(card);
   } catch (err) {
     return next(err);
   }
 };
 
-exports.updateCard = async function(req, res, next) {
+exports.put = async function(req, res, next) {
   debug("update card", req.params.cardId, req.body);
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
     res.statusMessage = "body must not be empty";
@@ -57,25 +57,23 @@ exports.updateCard = async function(req, res, next) {
     return next();
   }
 
-  var card = new Card({
-    _id: req.params.cardId,
-    id: req.body.id,
-    content: req.body.content
-  });
-
   try {
-    card = await Card.findByIdAndUpdate(req.params.cardId, card);
+    var card = await updateCard(
+      req.params.cardId,
+      req.body.id,
+      req.body.content
+    );
     res.status(200).json(card);
   } catch (err) {
     return next(err);
   }
 };
 
-exports.deleteCard = async function(req, res, next) {
+exports.delete = async function(req, res, next) {
   debug("delete card", req.params.cardId);
 
   try {
-    await Card.findByIdAndDelete(req.params.cardId);
+    await deleteCard(req);
     res.status(200).end();
   } catch (err) {
     return next(err);

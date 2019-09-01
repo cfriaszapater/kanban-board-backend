@@ -3,10 +3,10 @@ var router = express.Router();
 
 var cardController = require("../controllers/cardController");
 
-router.get("/", cardController.listCards);
-router.post("/", cardController.postCard);
-router.get("/:cardId", cardController.getCard);
-router.put("/:cardId", cardController.updateCard);
-router.delete("/:cardId", cardController.deleteCard);
+router.get("/", cardController.list);
+router.post("/", cardController.post);
+router.get("/:cardId", cardController.get);
+router.put("/:cardId", cardController.put);
+router.delete("/:cardId", cardController.delete);
 
 module.exports = router;
