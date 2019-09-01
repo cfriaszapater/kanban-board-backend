@@ -1,14 +1,18 @@
-var Column = require("../db/column");
+const {
+  listColumns,
+  createColumn,
+  getColumnById,
+  updateColumn,
+  deleteColumn
+} = require("../domain/column");
 var debug = require("debug")(
   "kanban-board-backend:controllers:columnController"
 );
 
-exports.listColumns = async function(req, res, next) {
+exports.list = async function(req, res, next) {
   debug("list columns");
   try {
-    let columns = await Column.find()
-      .sort([["id", "ascending"]])
-      .exec();
+    let columns = await listColumns();
     debug(columns);
     res.json(columns);
   } catch (err) {
@@ -16,7 +20,7 @@ exports.listColumns = async function(req, res, next) {
   }
 };
 
-exports.createColumn = async function(req, res, next) {
+exports.create = async function(req, res, next) {
   debug("create column", req.body);
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
     res.statusMessage = "body must not be empty";
@@ -24,25 +28,24 @@ exports.createColumn = async function(req, res, next) {
     return next();
   }
 
-  var column = new Column({
-    id: req.body.id,
-    title: req.body.title,
-    cardIds: req.body.cardIds
-  });
-
   try {
-    column = await column.save();
+    var column = await createColumn(
+      req.body.id,
+      req.body.title,
+      req.body.cardIds
+    );
     res.status(201).json(column);
   } catch (err) {
     next(err);
   }
 };
 
-exports.getColumn = async function(req, res, next) {
+exports.get = async function(req, res, next) {
   debug("get column", req.params.columnId);
 
   try {
-    let column = await Column.findById(req.params.columnId);
+    let column = await getColumnById(req.params.columnId);
+
     if (column == null) {
       res.statusMessage =
         "column with id " + req.params.columnId + " not found";
@@ -55,7 +58,7 @@ exports.getColumn = async function(req, res, next) {
   }
 };
 
-exports.updateColumn = async function(req, res, next) {
+exports.update = async function(req, res, next) {
   debug("update column", req.params.columnId, req.body);
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
     res.statusMessage = "body must not be empty";
@@ -68,26 +71,24 @@ exports.updateColumn = async function(req, res, next) {
     return next();
   }
 
-  var column = new Column({
-    _id: req.params.columnId,
-    id: req.body.id,
-    title: req.body.title,
-    cardIds: req.body.cardIds
-  });
-
   try {
-    column = await Column.findByIdAndUpdate(req.params.columnId, column);
+    var column = await updateColumn(
+      req.params.columnId,
+      req.body.id,
+      req.body.title,
+      req.body.cardIds
+    );
     res.status(200).json(column);
   } catch (err) {
     return next(err);
   }
 };
 
-exports.deleteColumn = async function(req, res, next) {
+exports.delete = async function(req, res, next) {
   debug("delete column", req.params.columnId);
 
   try {
-    await Column.findByIdAndDelete(req.params.columnId);
+    await deleteColumn(req.params.columnId);
     res.status(200).end();
   } catch (err) {
     return next(err);

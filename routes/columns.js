@@ -3,10 +3,10 @@ var router = express.Router();
 
 var columnController = require("../controllers/columnController");
 
-router.get("/", columnController.listColumns);
-router.post("/", columnController.createColumn);
-router.get("/:columnId", columnController.getColumn);
-router.put("/:columnId", columnController.updateColumn);
-router.delete("/:columnId", columnController.deleteColumn);
+router.get("/", columnController.list);
+router.post("/", columnController.create);
+router.get("/:columnId", columnController.get);
+router.put("/:columnId", columnController.update);
+router.delete("/:columnId", columnController.delete);
 
 module.exports = router;
