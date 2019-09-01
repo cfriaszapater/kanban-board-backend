@@ -1,4 +1,6 @@
-var Card = require("../models/card");
+const { createCard } = require("../domain/card");
+
+var Card = require("../db/card");
 var debug = require("debug")("kanban-board-backend:controllers:cardController");
 
 exports.listCards = async function(req, res, next) {
@@ -14,7 +16,7 @@ exports.listCards = async function(req, res, next) {
   }
 };
 
-exports.createCard = async function(req, res, next) {
+exports.postCard = async function(req, res, next) {
   debug("create card", req.body);
   if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
     res.statusMessage = "body must not be empty";
@@ -22,13 +24,9 @@ exports.createCard = async function(req, res, next) {
     return next();
   }
 
-  var card = new Card({
-    id: req.body.id,
-    content: req.body.content
-  });
-
   try {
-    card = await card.save();
+    var card = await createCard(req.body.id, req.body.content);
+
     res.status(201).json(card);
   } catch (err) {
     next(err);

@@ -1,4 +1,4 @@
-var Column = require("../models/column");
+var Column = require("../db/column");
 var debug = require("debug")(
   "kanban-board-backend:controllers:columnController"
 );
