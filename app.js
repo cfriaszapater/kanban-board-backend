@@ -10,6 +10,9 @@ var helmet = require("helmet");
 var indexRouter = require("./routes/index");
 var cardsRouter = require("./routes/cards");
 var columnsRouter = require("./routes/columns");
+const { jwt } = require("./auth/jwt");
+const errorHandler = require("./auth/error-handler");
+const usersController = require("./controllers/users.controller");
 
 var app = express();
 
@@ -25,9 +28,16 @@ dbConnectionSetup();
 // Enable calls from same host (eg: frontend running also in localhost)
 app.use(cors());
 
+// use JWT auth to secure the api
+app.use(jwt());
+
 app.use("/", indexRouter);
 app.use("/cards", cardsRouter);
 app.use("/columns", columnsRouter);
+app.use("/users", usersController);
+
+// global error handler
+app.use(errorHandler);
 
 module.exports = app;
 
