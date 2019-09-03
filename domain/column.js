@@ -1,4 +1,5 @@
 var Column = require("../db/column");
+var debug = require("debug")("kanban-board-backend:domain:column");
 
 exports.listColumns = async function listColumns() {
   return await Column.find()
@@ -20,15 +21,8 @@ exports.getColumnById = async function getColumnById(columnId) {
   return await Column.findById(columnId);
 };
 
-exports.updateColumn = async function updateColumn(_id, id, title, cardIds) {
-  var column = new Column({
-    _id: _id,
-    id: id,
-    title: title,
-    cardIds: cardIds
-  });
-  column = await Column.findByIdAndUpdate(_id, column);
-  return column;
+exports.updateColumn = async function updateColumn(column) {
+  return await Column.findByIdAndUpdate(column._id, column);
 };
 
 exports.deleteColumn = async function deleteColumn(columnId) {

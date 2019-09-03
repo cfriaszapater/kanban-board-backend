@@ -5,6 +5,7 @@ const {
   updateColumn,
   deleteColumn
 } = require("../domain/column");
+const { Column } = require("../db/column");
 var debug = require("debug")(
   "kanban-board-backend:controllers:columnController"
 );
@@ -72,10 +73,12 @@ exports.update = async function(req, res, next) {
 
   try {
     var column = await updateColumn(
-      req.params.columnId,
-      req.body.id,
-      req.body.title,
-      req.body.cardIds
+      new Column({
+        _id: req.params.columnId,
+        id: req.body.id,
+        title: req.body.title,
+        cardIds: req.body.cardIds
+      })
     );
     res.status(200).json(column);
   } catch (err) {

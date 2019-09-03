@@ -37,7 +37,7 @@ exports.get = async function(req, res, next) {
   debug("get card", req.params.cardId);
 
   try {
-    let card = await getCardById(req);
+    let card = await getCardById(req.params.cardId);
     res.status(200).json(card);
   } catch (err) {
     return next(err);
@@ -73,7 +73,7 @@ exports.delete = async function(req, res, next) {
   debug("delete card", req.params.cardId);
 
   try {
-    await deleteCard(req);
+    await deleteCard(req.params.cardId);
     res.status(200).end();
   } catch (err) {
     return next(err);
