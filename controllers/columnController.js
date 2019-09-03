@@ -5,7 +5,7 @@ const {
   updateColumn,
   deleteColumn
 } = require("../domain/column");
-const { Column } = require("../db/column");
+const Column = require("../db/column");
 var debug = require("debug")(
   "kanban-board-backend:controllers:columnController"
 );
