@@ -13,7 +13,6 @@ exports.list = async function(req, res, next) {
   debug("list columns");
   try {
     let columns = await listColumns();
-    debug(columns);
     res.json(columns);
   } catch (err) {
     return next(err);
