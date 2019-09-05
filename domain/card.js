@@ -3,67 +3,74 @@ var Column = require("../db/column");
 var { listColumns, updateColumn } = require("./column");
 var debug = require("debug")("kanban-board-backend:domain:card");
 
-exports.createCard = async function createCard(cardId, cardContent) {
-  var card = new Card({
-    id: cardId,
-    content: cardContent
+exports.createCard = async function createCard(card, userId) {
+  card = new Card({
+    ...card,
+    user: userId
   });
+  debug("card to save: " + card);
   card = await card.save();
+  debug("saved card: " + card);
   await addCardInFirstColumn(card);
   return card;
 };
 
 async function addCardInFirstColumn(card) {
-  let firstCol = await firstColumn();
+  let firstCol = await firstColumn(card.user);
   firstCol.cardIds.push(card.id);
   await firstCol.save();
 }
 
-async function firstColumn() {
-  return await Column.findOne()
+async function firstColumn(userId) {
+  return await Column.findOne({ user: userId })
     .sort([["id", "ascending"]])
     .exec();
 }
 
-exports.getCardById = async function getById(cardId) {
-  return await Card.findById(cardId);
+exports.getCardById = async function getById(cardId, userId) {
+  const card = await Card.findById(cardId);
+  checkUserOwnsCard(card, userId);
+  return card;
 };
 
-exports.listCardsSortByIdAscending = async function listSortByIdAscending() {
-  let cards = await Card.find()
+function checkUserOwnsCard(card, userId) {
+  if (card.user !== userId) {
+    throw new Error("User " + userId + " unauthorized on card " + card);
+  }
+}
+
+exports.listCardsSortByIdAscending = async function listSortByIdAscending(
+  userId
+) {
+  let cards = await Card.find({ user: userId })
     .sort([["id", "ascending"]])
     .exec();
   return cards;
 };
 
-exports.updateCard = async function updateCard(_id, id, content) {
-  var card = new Card({
-    _id: _id,
-    id: id,
-    content: content
-  });
-  card = await Card.findByIdAndUpdate(_id, card);
-  return card;
+exports.updateCard = async function updateCard(_id, card, userId) {
+  return await Card.findOneAndUpdate({ _id: _id, user: userId }, card);
 };
 
-exports.deleteCard = async function deleteCard(cardId) {
+exports.deleteCard = async function deleteCard(cardId, userId) {
   // card.id is "frontend id", card._id is "backend id". Need to find card in columns by "card.id" here:
   const card = await Card.findById(cardId);
-  debug("card to delete: " + card);
-  await deleteCardFromColumns(card.id);
+  checkUserOwnsCard(card, userId);
 
+  debug("card to delete: " + card);
+  await deleteCardFromColumns(card);
   await Card.findByIdAndDelete(cardId);
 };
 
-async function deleteCardFromColumns(cardFrontendId) {
-  const column = await columnContainingCard(cardFrontendId);
+async function deleteCardFromColumns(card) {
+  const column = await columnContainingCard(card.id, card.user);
   debug("columnContainingCard = " + JSON.stringify(column));
-  const updatedColumn = columnWithoutCard(column, cardFrontendId);
+  const updatedColumn = columnWithoutCard(column, card.id);
   debug("column to update: " + JSON.stringify(updatedColumn));
   await updateColumn(updatedColumn);
   debug(
-    "Deleted card " +
-      cardFrontendId +
+    "Deleted card with frontendId " +
+      card.id +
       " from column " +
       column._id +
       ", result cardIds: " +
@@ -71,8 +78,8 @@ async function deleteCardFromColumns(cardFrontendId) {
   );
 }
 
-async function columnContainingCard(cardFrontendId) {
-  const columns = await listColumns();
+async function columnContainingCard(cardFrontendId, userId) {
+  const columns = await listColumns(userId);
   for (let i = 0; i < columns.length; i++) {
     const column = columns[i];
     if (column.cardIds.includes(cardFrontendId)) {

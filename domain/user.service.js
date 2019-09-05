@@ -4,14 +4,14 @@ const { jwtSecret } = require("../auth/jwt");
 // TODO users hardcoded for simplicity, store in a db for production applications
 const users = [
   {
-    id: 1,
+    _id: 1,
     username: "test",
     password: "test",
     firstName: "Test",
     lastName: "User"
   },
   {
-    id: 2,
+    _id: 2,
     username: "jarl",
     password: "jarl",
     firstName: "JARL",
@@ -28,7 +28,7 @@ async function authenticate({ username, password }) {
     u => u.username === username && u.password === password
   );
   if (user) {
-    const token = jwt.sign({ sub: user.id }, jwtSecret());
+    const token = jwt.sign({ sub: user._id }, jwtSecret());
     // eslint-disable-next-line no-unused-vars
     const { password, ...userWithoutPassword } = user;
     return {

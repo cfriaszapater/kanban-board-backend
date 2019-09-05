@@ -10,7 +10,10 @@ var debug = require("debug")("kanban-board-backend:controllers:cardController");
 exports.list = async function(req, res, next) {
   debug("list cards");
   try {
-    let cards = await listCardsSortByIdAscending();
+    // express-jwt populates req.user with the contents of the decripted jwt token
+    // as per https://github.com/auth0/express-jwt#express-jwt .
+    // Jwt token is set (encrypted) and passed to the client in /authenticate .
+    let cards = await listCardsSortByIdAscending(req.user.sub);
     res.json(cards);
   } catch (err) {
     return next(err);
@@ -26,7 +29,7 @@ exports.post = async function(req, res, next) {
   }
 
   try {
-    var card = await createCard(req.body.id, req.body.content);
+    var card = await createCard(req.body, req.user.sub);
     res.status(201).json(card);
   } catch (err) {
     next(err);
@@ -37,7 +40,7 @@ exports.get = async function(req, res, next) {
   debug("get card", req.params.cardId);
 
   try {
-    let card = await getCardById(req.params.cardId);
+    let card = await getCardById(req.params.cardId, req.user.sub);
     res.status(200).json(card);
   } catch (err) {
     return next(err);
@@ -58,11 +61,7 @@ exports.put = async function(req, res, next) {
   }
 
   try {
-    var card = await updateCard(
-      req.params.cardId,
-      req.body.id,
-      req.body.content
-    );
+    var card = await updateCard(req.params.cardId, req.body, req.user.sub);
     res.status(200).json(card);
   } catch (err) {
     return next(err);
@@ -73,7 +72,7 @@ exports.delete = async function(req, res, next) {
   debug("delete card", req.params.cardId);
 
   try {
-    await deleteCard(req.params.cardId);
+    await deleteCard(req.params.cardId, req.user.sub);
     res.status(200).end();
   } catch (err) {
     return next(err);

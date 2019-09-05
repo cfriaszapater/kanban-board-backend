@@ -16,7 +16,11 @@ var ColumnSchema = new Schema({
       type: String,
       required: false
     }
-  ]
+  ],
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true
+  }
 });
 
 // Virtual property: column's URL

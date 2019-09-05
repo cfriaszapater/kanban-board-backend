@@ -13,7 +13,7 @@ var debug = require("debug")(
 exports.list = async function(req, res, next) {
   debug("list columns");
   try {
-    let columns = await listColumns();
+    let columns = await listColumns(req.user.sub);
     res.json(columns);
   } catch (err) {
     return next(err);
@@ -29,11 +29,7 @@ exports.create = async function(req, res, next) {
   }
 
   try {
-    var column = await createColumn(
-      req.body.id,
-      req.body.title,
-      req.body.cardIds
-    );
+    var column = await createColumn(req.body, req.user.sub);
     res.status(201).json(column);
   } catch (err) {
     next(err);
@@ -44,7 +40,7 @@ exports.get = async function(req, res, next) {
   debug("get column", req.params.columnId);
 
   try {
-    let column = await getColumnById(req.params.columnId);
+    let column = await getColumnById(req.params.columnId, req.user.sub);
 
     if (column == null) {
       res.statusMessage =
@@ -73,12 +69,9 @@ exports.update = async function(req, res, next) {
 
   try {
     var column = await updateColumn(
-      new Column({
-        _id: req.params.columnId,
-        id: req.body.id,
-        title: req.body.title,
-        cardIds: req.body.cardIds
-      })
+      req.params.columnId,
+      req.body,
+      req.user.sub
     );
     res.status(200).json(column);
   } catch (err) {
@@ -90,7 +83,7 @@ exports.delete = async function(req, res, next) {
   debug("delete column", req.params.columnId);
 
   try {
-    await deleteColumn(req.params.columnId);
+    await deleteColumn(req.params.columnId, req.user.sub);
     res.status(200).end();
   } catch (err) {
     return next(err);

@@ -10,6 +10,10 @@ var CardSchema = new Schema({
   content: {
     type: String,
     required: false
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true
   }
 });
 
