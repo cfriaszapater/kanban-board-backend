@@ -10,9 +10,9 @@ var helmet = require("helmet");
 var indexRouter = require("./routes/index");
 var cardsRouter = require("./routes/cards");
 var columnsRouter = require("./routes/columns");
+const usersRouter = require("./routes/users");
 const { jwt } = require("./auth/jwt");
 const errorHandler = require("./auth/error-handler");
-const usersController = require("./controllers/users.controller");
 
 var app = express();
 
@@ -34,7 +34,7 @@ app.use(jwt());
 app.use("/", indexRouter);
 app.use("/cards", cardsRouter);
 app.use("/columns", columnsRouter);
-app.use("/users", usersController);
+app.use("/users", usersRouter);
 
 // global error handler
 app.use(errorHandler);

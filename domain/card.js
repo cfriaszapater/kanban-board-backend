@@ -34,7 +34,8 @@ exports.getCardById = async function getById(cardId, userId) {
 };
 
 function checkUserOwnsCard(card, userId) {
-  if (card.user !== userId) {
+  debug("checkUserOwnsCard(card.user, userId):", card.user, userId);
+  if (card.user != userId) {
     throw new Error("User " + userId + " unauthorized on card " + card);
   }
 }
