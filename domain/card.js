@@ -66,16 +66,16 @@ exports.deleteCard = async function deleteCard(cardId, userId) {
 async function deleteCardFromColumns(card) {
   const column = await columnContainingCard(card.id, card.user);
   debug("columnContainingCard = " + JSON.stringify(column));
-  const updatedColumn = columnWithoutCard(column, card.id);
-  debug("column to update: " + JSON.stringify(updatedColumn));
-  await updateColumn(updatedColumn);
+  const columnToUpdate = columnWithoutCard(column, card.id);
+  debug("column to update: " + JSON.stringify(columnToUpdate));
+  await updateColumn(columnToUpdate._id, columnToUpdate, card.user);
   debug(
     "Deleted card with frontendId " +
       card.id +
       " from column " +
       column._id +
       ", result cardIds: " +
-      updatedColumn.cardIds
+      columnToUpdate.cardIds
   );
 }
 
