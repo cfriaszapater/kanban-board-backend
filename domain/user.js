@@ -8,7 +8,7 @@ exports.token = async function token({ username, password }) {
   const user = await User.findOne({ username: username })
     .sort([["username", "ascending"]])
     .exec();
-  if (await compare(password, user.password)) {
+  if (user && (await compare(password, user.password))) {
     const token = jwt.sign({ sub: user._id }, jwtSecret());
     // eslint-disable-next-line no-unused-vars
     const { password, ...userWithoutPassword } = user;
