@@ -53,7 +53,8 @@ function dbConnectionSetup() {
 }
 
 function dbUri() {
-  var devUri =
-    "mongodb+srv://admin:DZWkrlyCyhLimrez@cluster0-pmxkl.azure.mongodb.net/kanban_board?retryWrites=true&w=majority";
-  return process.env.MONGODB_URI || devUri;
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI env var is not set, cannot connect to DB");
+  }
+  return process.env.MONGODB_URI;
 }

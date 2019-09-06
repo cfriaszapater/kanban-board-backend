@@ -1,16 +1,38 @@
 # kanban-board-backend
 
-<https://bs-kanban-board-backend.herokuapp.com>
+<https://bs-kanban-board-backend.herokuapp.com> (requires authentication, )
 
-Kanban board backend REST API built with node + express.
+Kanban board backend REST API with mongoDB datastore, built with node + express. Features jwt token authentication.
 
-## Build
+See the frontend application at [kanban-board](https://github.com/cfriaszapater/kanban-board).
+
+## Development
+
+If you want to run it locally:
+
+### Build
 
 ```sh
 npm install
 ```
 
-## Run
+### Test
+
+```sh
+npm test
+```
+
+### Set MONGODB_URI
+
+You can put the URI in a file named `.dev-mongodb-uri` in the root of the project and it will be automatically picked up by the run script in dev env (see below).
+
+The URI looks like this, substituting `<user>`, `<pass>` and `cluster0-pmxkl.azure.mongodb.net` with your own (*):
+
+`mongodb+srv://<user>:<pass>@cluster0-pmxkl.azure.mongodb.net/kanban_board?retryWrites=true&w=majority`
+
+(*) You can create a cloud mongodb account in the free tier and use it.
+
+### Run
 
 In dev (debug log and monitor file changes):
 
@@ -18,13 +40,9 @@ In dev (debug log and monitor file changes):
 DEBUG=kanban-board-backend:* npm run devstart | bunyan
 ```
 
-Standard:
+### Deploy to production
 
-```sh
-npm start
-```
-
-## Deploy to production
+This is what I used to deploy to production (having an heroku account and git heroku remote set to point to it):
 
 ```sh
 git push heroku master
@@ -43,7 +61,7 @@ Config:
 heroku config
 ```
 
-## Build with docker (for fun)
+### Build with docker (for fun)
 
 Eg for "0.2.0-heroku" tag:
 
@@ -51,8 +69,12 @@ Eg for "0.2.0-heroku" tag:
 docker build -t koldraj/kanban-board-backend:0.2.0-heroku .
 ```
 
-## Run with docker (for fun)
+### Run with docker (for fun)
 
 ```sh
 docker run --name kanban-board-backend -p 8080:8080 -d koldraj/kanban-board-backend:0.2.0-heroku
 ```
+
+## License
+
+See [LICENSE](./LICENSE).
