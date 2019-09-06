@@ -9,14 +9,7 @@ exports.token = async function token({ username, password }) {
     .sort([["username", "ascending"]])
     .exec();
   if (user && (await compare(password, user.password))) {
-    const token = jwt.sign({ sub: user._id }, jwtSecret());
-    // eslint-disable-next-line no-unused-vars
-    const { password, ...userWithoutPassword } = user;
-    // Return an object with username and token, not just token, although: TODO refactor frontend to receive just token
-    return {
-      ...userWithoutPassword,
-      token
-    };
+    return jwt.sign({ sub: user._id }, jwtSecret());
   }
 };
 
