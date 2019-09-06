@@ -1,6 +1,6 @@
 # kanban-board-backend
 
-<https://bs-kanban-board-backend.herokuapp.com> (requires authentication, )
+<https://bs-kanban-board-backend.herokuapp.com> (requires authentication, so better go to the frontend URL, see below).
 
 Kanban board backend REST API with mongoDB datastore, built with node + express. Features jwt token authentication.
 
@@ -63,6 +63,8 @@ heroku config
 
 ### Build with docker (for fun)
 
+Not used for current deploy to production, provided here in case you want to use it to deploy as a docker container somewhere:
+
 Eg for "0.2.0-heroku" tag:
 
 ```sh
@@ -70,6 +72,8 @@ docker build -t koldraj/kanban-board-backend:0.2.0-heroku .
 ```
 
 ### Run with docker (for fun)
+
+If you want to run it locally with docker:
 
 ```sh
 docker run --name kanban-board-backend -p 8080:8080 -d koldraj/kanban-board-backend:0.2.0-heroku
