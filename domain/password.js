@@ -28,6 +28,5 @@ function hashAsync(password, salt) {
 }
 
 exports.compare = async function compare(password, hash) {
-  debug("compare ", password, hash);
   return bcrypt.compare(password, hash);
 };
