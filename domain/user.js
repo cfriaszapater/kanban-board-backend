@@ -2,14 +2,17 @@
 const { jwtSecret } = require("../auth/jwt");
 const User = require("../db/user");
 const { compare, hash } = require("./password");
+const util = require("util");
 var debug = require("debug")("kanban-board-backend:domain:user");
+
+const sign = util.promisify(jwt.sign);
 
 exports.token = async function token({ username, password }) {
   const user = await User.findOne({ username: username })
     .sort([["username", "ascending"]])
     .exec();
   if (user && (await compare(password, user.password))) {
-    return jwt.sign({ sub: user._id }, jwtSecret());
+    return await sign({ sub: user._id }, jwtSecret(), { expiresIn: "1h" });
   }
 };
 
