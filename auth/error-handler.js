@@ -1,6 +1,8 @@
 module.exports = errorHandler;
 
-function errorHandler(err, req, res) {
+// Express requires error handling middleware to keep the 4-arg signature, even if 'next' arg is not used
+// eslint-disable-next-line no-unused-vars
+function errorHandler(err, req, res, next) {
   if (typeof err === "string") {
     // custom application error
     return res.status(400).json({ message: err });
