@@ -1,5 +1,5 @@
 var express = require("express");
-var morgan = require("morgan");
+var httpLogger = require("morgan");
 var mongoose = require("mongoose");
 var debug = require("debug")("kanban-board-backend:app");
 var bunyan = require("bunyan");
@@ -20,8 +20,8 @@ var app = express();
 app.use(helmet());
 // Compress all routes
 app.use(compression());
-// Log HTTP requests in dev env
-app.use(morgan("dev"));
+// Log HTTP requests (with dev info while we are in development mode)
+app.use(httpLogger("dev"));
 // Parse incoming requests with JSON payload in body
 app.use(express.json());
 dbConnectionSetup();
