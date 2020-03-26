@@ -12,7 +12,7 @@ exports.token = async function token({ username, password }) {
     .sort([["username", "ascending"]])
     .exec();
   if (user && (await compare(password, user.password))) {
-    return await sign({ sub: user._id }, jwtSecret(), { expiresIn: "1h" });
+    return await sign({ sub: user._id }, jwtSecret(), { expiresIn: "1 day" });
   }
 };
 
