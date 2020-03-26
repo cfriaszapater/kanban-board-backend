@@ -25,9 +25,7 @@ app.use(httpLogger("dev"));
 // Parse incoming requests with JSON payload in body
 app.use(express.json());
 dbConnectionSetup();
-// Enable calls from same host (eg: frontend running also in localhost)
 app.use(cors());
-
 // use JWT auth to secure the api
 app.use(jwt());
 
