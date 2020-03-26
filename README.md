@@ -79,6 +79,10 @@ If you want to run it locally with docker:
 docker run --name kanban-board-backend -p 8080:8080 -d koldraj/kanban-board-backend:0.2.0-heroku
 ```
 
+## Authentication
+
+POST a valid user and password to `/user/token` to get a bearer token.
+
 ## License
 
 See [LICENSE](./LICENSE).
