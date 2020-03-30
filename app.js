@@ -24,7 +24,7 @@ app.use(compression());
 app.use(httpLogger("dev"));
 // Parse incoming requests with JSON payload in body
 app.use(express.json());
-dbConnectionSetup();
+// Allow CORS from any origin
 app.use(cors());
 // use JWT auth to secure the api
 app.use(jwt());
@@ -36,6 +36,8 @@ app.use("/users", usersRouter);
 
 // global error handler
 app.use(errorHandler);
+
+dbConnectionSetup();
 
 module.exports = app;
 
