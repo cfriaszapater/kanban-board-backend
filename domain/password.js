@@ -1,9 +1,7 @@
 const bcrypt = require("bcryptjs");
-var debug = require("debug")("kanban-board-backend:domain:password");
 
 exports.hash = async function hash(password) {
   const salt = await saltAsync();
-  debug("salt: " + salt);
   return await hashAsync(password, salt);
 };
 

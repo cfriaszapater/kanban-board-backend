@@ -1,7 +1,9 @@
-var Card = require("../db/card");
-var Column = require("../db/column");
-var { listColumns, updateColumn } = require("./column");
-var debug = require("debug")("kanban-board-backend:domain:card");
+const Card = require("../db/card");
+const Column = require("../db/column");
+const { listColumns, updateColumn } = require("./column");
+const debug = require("debug")("kanban-board-backend:domain:card");
+const { ForbiddenError } = require("./error/ForbiddenError");
+const { NotFoundError } = require("./error/NotFoundError");
 
 exports.createCard = async function createCard(card, userId) {
   card = new Card({
@@ -36,7 +38,9 @@ exports.getCardById = async function getById(cardId, userId) {
 function checkUserOwnsCard(card, userId) {
   debug("checkUserOwnsCard(card.user, userId):", card.user, userId);
   if (card.user != userId) {
-    throw new Error("User " + userId + " unauthorized on card " + card);
+    throw new ForbiddenError(
+      "User " + userId + " unauthorized on card " + card
+    );
   }
 }
 
@@ -87,7 +91,9 @@ async function columnContainingCard(cardFrontendId, userId) {
       return column;
     }
   }
-  throw new Error("No column contains card with frontend id " + cardFrontendId);
+  throw new NotFoundError(
+    "No column contains card with frontend id " + cardFrontendId
+  );
 }
 
 function columnWithoutCard(column, cardFrontendId) {

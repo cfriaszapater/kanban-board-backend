@@ -3,7 +3,9 @@ const { jwtSecret } = require("../auth/jwt");
 const User = require("../db/user");
 const { compare, hash } = require("./password");
 const util = require("util");
-var debug = require("debug")("kanban-board-backend:domain:user");
+const { BadRequestError } = require("./error/BadRequestError");
+const { AlreadyExistsError } = require("./error/AlreadyExistsError");
+const debug = require("debug")("kanban-board-backend:domain:user");
 
 const sign = util.promisify(jwt.sign);
 
@@ -17,15 +19,24 @@ exports.token = async function token({ username, password }) {
 };
 
 exports.createUser = async function createUser(reqUser) {
-  if (!reqUser.username || !reqUser.password) {
-    throw new Error("Username and password are required");
-  }
+  try {
+    if (!reqUser.username || !reqUser.password) {
+      throw new BadRequestError("Username and password are required");
+    }
 
-  const hashedPassword = await hash(reqUser.password);
-  debug("hashedPassword: " + hashedPassword);
-  const user = new User({
-    ...reqUser,
-    password: hashedPassword
-  });
-  return await user.save();
+    const hashedPassword = await hash(reqUser.password);
+    const user = new User({
+      ...reqUser,
+      password: hashedPassword
+    });
+    return await user.save();
+  } catch (err) {
+    if (
+      err.name === "MongoError" &&
+      err.message.startsWith("E11000") // duplicate key error
+    ) {
+      throw new AlreadyExistsError("Username already exists");
+    }
+    throw err;
+  }
 };

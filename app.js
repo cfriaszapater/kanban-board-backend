@@ -1,19 +1,20 @@
-var express = require("express");
-var httpLogger = require("morgan");
-var mongoose = require("mongoose");
-var debug = require("debug")("kanban-board-backend:app");
-var bunyan = require("bunyan");
-var log = bunyan.createLogger({ name: "kanban-board-backend" });
-var cors = require("cors");
-var compression = require("compression");
-var helmet = require("helmet");
-var indexRouter = require("./routes/index");
-var cardsRouter = require("./routes/cards");
-var columnsRouter = require("./routes/columns");
+const express = require("express");
+const httpLogger = require("morgan");
+const mongoose = require("mongoose");
+const debug = require("debug")("kanban-board-backend:app");
+const bunyan = require("bunyan");
+const log = bunyan.createLogger({ name: "kanban-board-backend" });
+const cors = require("cors");
+const compression = require("compression");
+const helmet = require("helmet");
+const indexRouter = require("./routes/index");
+const cardsRouter = require("./routes/cards");
+const columnsRouter = require("./routes/columns");
 const usersRouter = require("./routes/users");
+const { handleError } = require("./controllers/handleError");
 const { jwt } = require("./auth/jwt");
 
-var app = express();
+const app = express();
 
 // Add security by setting some standard headers
 app.use(helmet());
@@ -45,7 +46,7 @@ function dbConnectionSetup() {
       useNewUrlParser: true
     })
     .then(debug("...connected to db"));
-  var db = mongoose.connection;
+  const db = mongoose.connection;
   db.on("error", err => log.error("DB connection error: %s", err));
 }
 
@@ -59,10 +60,7 @@ function dbUri() {
 // Express requires error handling middleware to keep the 4-arg signature, even if 'next' arg is not used
 // eslint-disable-next-line no-unused-vars
 function errorHandler(err, req, res, next) {
-  if (err.name === "UnauthorizedError") {
-    // jwt authentication error
-    return res.status(401).json({ message: "Invalid Token" });
-  }
+  const { status, responseBody } = handleError(err);
 
-  res.status(err.status || 500).json({ message: err.message });
+  res.status(status).json(responseBody);
 }

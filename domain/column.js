@@ -21,7 +21,7 @@ exports.getColumnById = async function getColumnById(columnId, userId) {
 };
 
 function checkUserOwnsColumn(column, userId) {
-  if (column.user != userId) {
+  if (column && column.user != userId) {
     throw new Error(
       "User " + userId + "unauthorized on columnId " + column._id
     );

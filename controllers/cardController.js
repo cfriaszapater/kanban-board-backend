@@ -5,7 +5,11 @@ const {
   updateCard,
   deleteCard
 } = require("../domain/card");
-var debug = require("debug")("kanban-board-backend:controllers:cardController");
+const debug = require("debug")(
+  "kanban-board-backend:controllers:cardController"
+);
+const { validateNotEmpty } = require("./validateNotEmpty");
+const { BadRequestError } = require("../domain/error/BadRequestError");
 
 exports.list = async function(req, res, next) {
   debug("list cards");
@@ -22,13 +26,10 @@ exports.list = async function(req, res, next) {
 
 exports.post = async function(req, res, next) {
   debug("create card", req.body);
-  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-    res.statusMessage = "body must not be empty";
-    res.status(400).end();
-    return next();
-  }
 
   try {
+    validateNotEmpty(req.body);
+
     var card = await createCard(req.body, req.user.sub);
     res.status(201).json(card);
   } catch (err) {
@@ -49,19 +50,17 @@ exports.get = async function(req, res, next) {
 
 exports.put = async function(req, res, next) {
   debug("update card", req.params.cardId, req.body);
-  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-    res.statusMessage = "body must not be empty";
-    res.status(400).end();
-    return next();
-  }
-  if (req.params.cardId !== req.body._id) {
-    res.statusMessage = "_id in path param does not match the one in body";
-    res.status(400).end();
-    return next();
-  }
 
   try {
-    var card = await updateCard(req.params.cardId, req.body, req.user.sub);
+    validateNotEmpty(req.body);
+
+    if (req.params.cardId !== req.body._id) {
+      throw new BadRequestError(
+        "_id in path param does not match the one in body"
+      );
+    }
+
+    const card = await updateCard(req.params.cardId, req.body, req.user.sub);
     res.status(200).json(card);
   } catch (err) {
     return next(err);

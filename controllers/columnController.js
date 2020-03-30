@@ -5,10 +5,12 @@ const {
   updateColumn,
   deleteColumn
 } = require("../domain/column");
-const Column = require("../db/column");
-var debug = require("debug")(
+const debug = require("debug")(
   "kanban-board-backend:controllers:columnController"
 );
+const { validateNotEmpty } = require("./validateNotEmpty");
+const { BadRequestError } = require("../domain/error/BadRequestError");
+const { NotFoundError } = require("../domain/error/NotFoundError");
 
 exports.list = async function(req, res, next) {
   debug("list columns");
@@ -22,13 +24,9 @@ exports.list = async function(req, res, next) {
 
 exports.create = async function(req, res, next) {
   debug("create column", req.body);
-  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-    res.statusMessage = "body must not be empty";
-    res.status(400).end();
-    return next();
-  }
-
   try {
+    validateNotEmpty(req.body);
+
     var column = await createColumn(req.body, req.user.sub);
     res.status(201).json(column);
   } catch (err) {
@@ -43,11 +41,11 @@ exports.get = async function(req, res, next) {
     let column = await getColumnById(req.params.columnId, req.user.sub);
 
     if (column == null) {
-      res.statusMessage =
-        "column with id " + req.params.columnId + " not found";
-      res.status(404).end();
-      return next();
+      throw new NotFoundError(
+        "column with id " + req.params.columnId + " not found"
+      );
     }
+
     res.status(200).json(column);
   } catch (err) {
     return next(err);
@@ -56,18 +54,15 @@ exports.get = async function(req, res, next) {
 
 exports.update = async function(req, res, next) {
   debug("update column", req.params.columnId, req.body);
-  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-    res.statusMessage = "body must not be empty";
-    res.status(400).end();
-    return next();
-  }
-  if (req.params.columnId !== req.body._id) {
-    res.statusMessage = "_id in path param does not match the one in body";
-    res.status(400).end();
-    return next();
-  }
 
   try {
+    validateNotEmpty(req.body);
+    if (req.params.columnId !== req.body._id) {
+      throw new BadRequestError(
+        "_id in path param does not match the one in body"
+      );
+    }
+
     var column = await updateColumn(
       req.params.columnId,
       req.body,
